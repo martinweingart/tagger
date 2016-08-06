@@ -1,0 +1,20 @@
+tagger -f arhivo.mp3
+tagger -r carpeta
+
+Parámetros
+----------
+-t título --title
+-a artista --artist
+-b album --album
+-y año --year
+-g genero --genre
+-n número pista --track
+
+Dependencias
+------------
+eyed3
+
+
+HACER
+-----
+- Capturar errores y mostrar un mensaje de que falló
