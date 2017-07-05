@@ -12,4 +12,5 @@ Parámetros
 
 Dependencias
 ------------
-eyed3
+pip install eyed3
+pip install pathlib
