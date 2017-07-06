@@ -3,5 +3,6 @@ include
 bin
 local
 lib
+share
 pip-selfcheck.json
 *pyc
