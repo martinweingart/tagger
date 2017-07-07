@@ -108,7 +108,7 @@ def main():
                 updateTag(tag, args)
                 tag.updateFile()
             else:
-                print "Error: is not a audio file"
+                print "Error: is not a supported audio file"
         else:
             if (args.recursively):
                 for root, dirs, files in os.walk(args.target, topdown=False):
