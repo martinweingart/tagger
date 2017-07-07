@@ -2,30 +2,25 @@
 #  -*- coding: utf-8 -*-
 
 #  IMPORTS
-import os.path
+import os
 from tag import Tag
 import argparse
-
-
-def isMP3(filePath):
-    fileName, fileExt = os.path.splitext(filePath)
-    return fileExt == '.mp3' or fileExt == '.MP3'
+import utils
 
 
 # Arguments handler
 def argHandler():
     parser = argparse.ArgumentParser()
-    inputArgGroup = parser.add_mutually_exclusive_group()
-    inputArgGroup.add_argument(
-        "-f",
-        "--file",
-        help="Update tag of given mp3 file"
+    parser.add_argument(
+        "target",
+        help="Target file or directory to update"
     )
 
-    inputArgGroup.add_argument(
+    parser.add_argument(
         "-r",
         "--recursively",
-        help="Update tag recursively on the specified folder"
+        help="Update tag recursively on the specified folder",
+        action="store_true"
     )
 
     parser.add_argument(
@@ -101,40 +96,33 @@ def updateTag(tag, args):
         tag.setTrack(args.track)
 
 
-def updateFolder(folder, args):
-    for root, dirs, files in os.walk(folder, topdown=False):
-        for file in files:
-            if (isMP3(file)):
-                tag = Tag()
-                tag.create(os.path.join(root, file))
-                updateTag(tag, args)
-                tag.updateFile()
-
-
-# Main Function
-# es una carpeta y existe
 def main():
     args = argHandler()
-    if args.recursively is None:
-        if (args.file is None):
-            print "Error: Must especified at least one argument: -f (file)" \
-                  + " or -r (folder)"
-        else:
-            if (checkPath(args.file, 'File')):
-                if (isMP3(args.file)):
-                    tag = Tag()
-                    tag.create(args.file)
-                    updateTag(tag, args)
-                    tag.updateFile()
-                else:
-                    print "Error: is not mp3 file"
+    if (not os.path.exists(args.target)):
+        print "File (or folder) not found"
     else:
-        if (checkPath(args.recursively, 'Folder')):
-            for root, dirs, files in os.walk(args.recursively, topdown=False):
-                for file in files:
-                    if (isMP3(file)):
+        if os.path.isfile(args.target):
+            if utils.isAudioFile(args.file):
+                tag = Tag()
+                tag.create(args.file)
+                updateTag(tag, args)
+                tag.updateFile()
+            else:
+                print "Error: is not a audio file"
+        else:
+            if (args.recursively):
+                for root, dirs, files in os.walk(args.target, topdown=False):
+                    for file in files:
+                        if utils.isAudioFile(file):
+                            tag = Tag()
+                            tag.create(os.path.join(root, file))
+                            updateTag(tag, args)
+                            tag.updateFile()
+            else:
+                for elem in os.listdir(args.target):
+                    if os.path.isfile(elem):
                         tag = Tag()
-                        tag.create(os.path.join(root, file))
+                        tag.create(os.path.join(args.target, elem))
                         updateTag(tag, args)
                         tag.updateFile()
     print "Done!"

@@ -2,7 +2,7 @@
 
 ## Uso
 
-tagger -f archivo.mp3 <br>
+tagger -f archivo <br>
 tagger -r carpeta
 
 ## Parámetros
@@ -17,3 +17,8 @@ tagger -r carpeta
 ## Dependencias
 
 pip install mutagen
+
+
+## TODO
+
+* Edición de metadatos para otros formatos: FLAC, OGG.
